@@ -60,5 +60,11 @@ Category Prediction: XGBoost / RandomForest (categorize transactions automatical
 
 Forecasting: Rolling average / Prophet (predict next month's spend)
 
+| Task                      | Model Type            | Features Used       | Output                     |
+| ------------------------- | --------------------- | ------------------- | -------------------------- |
+| Fraud / Anomaly Detection | IsolationForest       | amount\_log, hour   | Anomaly score, is\_anomaly |
+| Category Prediction       | XGBoost / RF          | amount\_log, hour   | Predicted category         |
+| Spending Forecast         | Rolling Avg / Prophet | amount over time    | Next month forecast amount |
+| Finance Q\&A              | LLM (GPT / mock)      | Transaction history | Text advice / answer       |
 
 
