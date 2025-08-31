@@ -68,3 +68,21 @@ Forecasting: Rolling average / Prophet (predict next month's spend)
 | Finance Q\&A              | LLM (GPT / mock)      | Transaction history | Text advice / answer       |
 
 
+What is Model Context Protocol (MCP)
+
+MCP (Model Context Protocol) is a design approach to:
+
+Standardize the input/output of ML models
+
+Maintain context about user, time, and features
+
+Enable multiple models to collaborate seamlessly
+
+Make models plug-and-play and traceable
+
+Why use MCP here?
+
+Currently, your /predict, /budget, /summary endpoints handle raw data inconsistently.
+
+Using MCP, you create a central context object that stores transaction features, user info, and computed features, which every model can access.
+
