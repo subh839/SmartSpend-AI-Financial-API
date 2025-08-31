@@ -1,0 +1,82 @@
+How the SmartSpend AI Models Work
+
+Your project uses 3 main ML tasks + LLM mock, connected through the API.
+
+A. Transaction Input
+{
+  "user_id": "U123",
+  "timestamp": "2025-08-31T15:30:00",
+  "amount": 120.5,
+  "category": "Groceries",
+  "merchant": "Walmart"
+}
+
+
+User submits a transaction via /transactions POST.
+
+FastAPI converts it into a Python object using Pydantic.
+
+B. Feature Engineering
+def make_features(df):
+    df['hour'] = pd.to_datetime(df['timestamp']).dt.hour
+    df['amount_log'] = np.log1p(df['amount'])
+
+
+Converts timestamp → hour of day (patterns in spending).
+
+Log-transform amount → normalizes skewed data.
+
+Returns features [amount_log, hour] for ML models.
+
+C. Anomaly Detection
+score = model_anomaly.decision_function(feat)[0]
+is_anomaly = score < threshold
+
+
+Isolation Forest or One-Class SVM:
+
+Learns normal spending patterns.
+
+decision_function returns a score:
+
+High score → normal transaction
+
+Low score → unusual/fraud
+
+threshold = -0.2 → sets cutoff for anomaly.
+
+Example:
+
+Transaction at 2 AM, very large amount → score < threshold → flagged as anomaly.
+
+D. Category Prediction
+pred_cat = model_category.predict(feat)[0]
+
+
+ML model predicts category automatically based on amount & time.
+
+Example:
+
+$120 at grocery store → “Groceries”
+
+$50 at gas station → “Transport”
+
+E. Budget / Summary
+monthly_avg = user_df['amount'].sum() / 3
+recommended = monthly_avg * 1.1
+
+
+Calculates average monthly spending per category.
+
+Adds 10% buffer → recommended budget.
+
+Summary endpoint gives total, average, max, min spending.
+
+F. Forecast
+daily_avg = user_df['amount'].resample('D', on='timestamp').sum().rolling(30).mean().iloc[-1]
+forecast = daily_avg * 30
+
+
+Rolling 30-day average → predicts next month’s spending.
+
+Helps user plan finances proactively.
