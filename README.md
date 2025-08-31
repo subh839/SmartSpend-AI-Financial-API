@@ -59,3 +59,6 @@ Anomaly Detection: IsolationForest (detect fraud / unusual transactions)
 Category Prediction: XGBoost / RandomForest (categorize transactions automatically)
 
 Forecasting: Rolling average / Prophet (predict next month's spend)
+
+
+
